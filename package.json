@@ -22,13 +22,15 @@
     "authentication",
     "swagger",
     "rest",
-    "example"
+    "example",
+    "docker",
+    "production"
   ],
   "author": "Your Name",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-username/elysia-backend-example.git"
+    "url": "https://github.com/codewithwan/learn-elysia-js.git"
   },
   "engines": {
     "bun": ">=1.0.0",

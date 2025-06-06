@@ -14,68 +14,63 @@ A comprehensive backend API built with **Elysia.js** featuring authentication, u
 - **Validation**: Request validation with detailed error messages
 - **Pagination**: Built-in pagination for list endpoints
 - **Search & Filtering**: Advanced search and filtering capabilities
+- **Docker Ready**: Simple Docker setup for production deployment
+- **Health Checks**: Built-in health monitoring and testing
 
-## 📋 Prerequisites
+## ⚡ Quick Start
 
-Before running this project, make sure you have:
+### Development
+```bash
+# Clone repository
+git clone https://github.com/codewithwan/learn-elysia-js.git
+cd learn-elysia-js
 
-- **Bun**: [Install Bun](https://bun.sh/docs/installation) (v1.0.0 or higher)
-- **Node.js**: v18.0.0 or higher (optional, for compatibility)
+# Install dependencies
+bun install
 
-## 🛠️ Installation
+# Start development server
+bun dev
+```
 
-1. **Clone the repository:**
-   ```bash
-   git clone <repository-url>
-   cd elysia-backend-example
-   ```
+Your API will be available at:
+- **API**: http://localhost:3000
+- **Documentation**: http://localhost:3000/swagger
 
-2. **Install dependencies:**
-   ```bash
-   bun install
-   ```
+### Production
+```bash
+# Edit production environment
+# Edit .env.production with your values
 
-3. **Set up environment variables:**
-   Create a `.env` file in the root directory:
-   ```env
-   PORT=3000
-   JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
-   ```
-
-4. **Start the development server:**
-   ```bash
-   bun run dev
-   ```
-
-The API will be available at `http://localhost:3000`
+# Deploy with Docker
+docker-compose --env-file .env.production up -d --build
+```
 
 ## 📚 API Documentation
 
-Once the server is running, you can access the interactive API documentation at:
-- **Swagger UI**: `http://localhost:3000/swagger`
+Access the interactive API documentation at: **http://localhost:3000/swagger**
 
-## 🔗 API Endpoints
+### Available Endpoints
 
-### Health Check
+#### Health Check
 - `GET /health` - Basic health check
 - `GET /health/ping` - Simple ping endpoint
 - `GET /health/status` - Service status information
 
-### Authentication
+#### Authentication
 - `POST /auth/register` - Register a new user
 - `POST /auth/login` - Login user
 - `POST /auth/logout` - Logout user
 - `GET /auth/me` - Get current user info
 - `POST /auth/refresh` - Refresh JWT token
 
-### Users
+#### Users
 - `GET /users` - Get all users (paginated)
 - `GET /users/:id` - Get user by ID
 - `PUT /users/profile` - Update user profile (authenticated)
 - `DELETE /users/account` - Delete user account (authenticated)
 - `GET /users/stats` - Get user statistics
 
-### Tasks
+#### Tasks
 - `GET /tasks` - Get all tasks (with filtering and pagination)
 - `GET /tasks/:id` - Get task by ID
 - `POST /tasks` - Create new task (authenticated)
@@ -84,183 +79,35 @@ Once the server is running, you can access the interactive API documentation at:
 - `GET /tasks/my/tasks` - Get current user's tasks (authenticated)
 - `GET /tasks/stats` - Get task statistics
 
-## 🔧 Usage Examples
-
-### Register a new user
-```bash
-curl -X POST http://localhost:3000/auth/register \
-  -H "Content-Type: application/json" \
-  -d '{
-    "email": "user@example.com",
-    "password": "password123",
-    "name": "John Doe"
-  }'
-```
-
-### Login
-```bash
-curl -X POST http://localhost:3000/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{
-    "email": "user@example.com",
-    "password": "password123"
-  }'
-```
-
-### Create a task (requires authentication)
-```bash
-curl -X POST http://localhost:3000/tasks \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
-  -d '{
-    "title": "Complete project documentation",
-    "description": "Write comprehensive README and API docs",
-    "priority": "high",
-    "tags": ["documentation", "priority"]
-  }'
-```
-
-### Get tasks with filtering
-```bash
-curl "http://localhost:3000/tasks?status=todo&priority=high&page=1&limit=10"
-```
-
 ## 🏗️ Project Structure
 
 ```
 src/
 ├── index.ts           # Main application entry point
+├── config/            # Configuration management
+│   └── index.ts       # Environment and app config
 ├── routes/            # Route modules
 │   ├── auth.ts        # Authentication routes
 │   ├── users.ts       # User management routes
 │   ├── tasks.ts       # Task management routes
 │   └── health.ts      # Health check routes
 ├── types/             # TypeScript type definitions
+│   └── index.ts       # Shared types
 └── utils/             # Utility functions
-```
+    ├── auth.ts        # Authentication helpers
+    ├── pagination.ts  # Pagination utilities
+    └── dataStore.ts   # Data management
 
-## 🛡️ Security Features
+# Development files
+package.json          # Dependencies and scripts
+bun.lockb            # Lock file
+.env                 # Development environment
 
-- **Password Hashing**: Uses bcrypt for secure password storage
-- **JWT Authentication**: Stateless authentication with configurable expiration
-- **CORS Protection**: Configurable cross-origin resource sharing
-- **Input Validation**: Comprehensive request validation
-- **Error Handling**: Secure error responses without sensitive data exposure
-
-## 🔄 Data Management
-
-Currently, this example uses in-memory storage for simplicity. In a production environment, you would typically integrate with:
-
-- **Database**: PostgreSQL, MySQL, MongoDB, etc.
-- **ORM/Query Builder**: Prisma, DrizzleORM, TypeORM, etc.
-- **Caching**: Redis, Memcached
-- **File Storage**: AWS S3, Google Cloud Storage
-
-## 📊 API Response Format
-
-### Success Response
-```json
-{
-  "message": "Operation successful",
-  "data": {
-    // Response data
-  }
-}
-```
-
-### Error Response
-```json
-{
-  "error": "Error Type",
-  "message": "Detailed error message",
-  "status": 400
-}
-```
-
-### Paginated Response
-```json
-{
-  "data": [...],
-  "pagination": {
-    "page": 1,
-    "limit": 10,
-    "total": 100,
-    "totalPages": 10,
-    "hasNext": true,
-    "hasPrev": false
-  }
-}
-```
-
-## 🧪 Testing
-
-You can test the API using various tools:
-
-### Using curl
-```bash
-# Health check
-curl http://localhost:3000/health
-
-# Get API information
-curl http://localhost:3000/
-```
-
-### Using Postman
-1. Import the OpenAPI/Swagger specification from `http://localhost:3000/swagger`
-2. Create requests based on the documented endpoints
-
-### Using HTTPie
-```bash
-# Install HTTPie
-pip install httpie
-
-# Test endpoints
-http GET localhost:3000/health
-http POST localhost:3000/auth/register email=test@example.com password=password123 name="Test User"
-```
-
-## 🚀 Deployment
-
-### Production Setup
-
-1. **Environment Variables:**
-   ```env
-   PORT=3000
-   JWT_SECRET=your-production-jwt-secret-minimum-256-bits
-   NODE_ENV=production
-   ```
-
-2. **Build and Run:**
-   ```bash
-   bun run build  # If you have a build script
-   bun run start  # Production start command
-   ```
-
-### Docker Deployment
-
-Create a `Dockerfile`:
-```dockerfile
-FROM oven/bun:1 as base
-WORKDIR /app
-
-# Install dependencies
-COPY package.json bun.lockb ./
-RUN bun install --frozen-lockfile
-
-# Copy source code
-COPY . .
-
-# Expose port
-EXPOSE 3000
-
-# Start the application
-CMD ["bun", "run", "src/index.ts"]
-```
-
-Build and run:
-```bash
-docker build -t elysia-api .
-docker run -p 3000:3000 elysia-api
+# Production files
+Dockerfile           # Production Docker build
+docker-compose.yml   # Docker services configuration
+docker-entrypoint.sh # Docker startup script
+.env.production      # Production environment file
 ```
 
 ## 🤝 Contributing
@@ -271,23 +118,11 @@ docker run -p 3000:3000 elysia-api
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- [Elysia.js](https://elysiajs.com/) - The fast and friendly web framework
-- [Bun](https://bun.sh/) - The fast JavaScript runtime
-- [Swagger/OpenAPI](https://swagger.io/) - API documentation standard
-
 ## 📞 Support
 
-If you have any questions or need help with this project:
-
-1. Check the [API Documentation](http://localhost:3000/swagger)
-2. Review the [Elysia.js Documentation](https://elysiajs.com/introduction.html)
-3. Open an issue on GitHub
+- **Documentation**: http://localhost:3000/swagger
+- **Elysia.js Docs**: https://elysiajs.com/introduction.html
+- **Issues**: Open a GitHub issue
 
 ---
 

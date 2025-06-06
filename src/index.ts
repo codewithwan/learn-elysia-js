@@ -126,17 +126,19 @@ const app = new Elysia()
   .use(healthRoutes)
   .use(authRoutes)
   .use(userRoutes)
-  .use(taskRoutes)
+  .use(taskRoutes);
 
-  // Start server
-  .listen(config.port);
-
-console.log(
-  `🚀 ${config.apiTitle} is running at http://${app.server?.hostname}:${app.server?.port}`
-);
-console.log(
-  `📚 API Documentation available at http://${app.server?.hostname}:${app.server?.port}/swagger`
-);
-console.log(`🔧 Environment: ${config.nodeEnv}`);
+// Only start server if this file is run directly
+if (import.meta.main) {
+  app.listen(config.port);
+  
+  console.log(
+    `🚀 ${config.apiTitle} is running at http://localhost:${config.port}`
+  );
+  console.log(
+    `📚 API Documentation available at http://localhost:${config.port}/swagger`
+  );
+  console.log(`🔧 Environment: ${config.nodeEnv}`);
+}
 
 export default app;
